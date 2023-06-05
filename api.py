@@ -103,6 +103,8 @@ async def history_route(request):
         tm_from = datetime.datetime.fromtimestamp(int(tm_from), datetime.timezone.utc)
     if tm_to:
         tm_to = datetime.datetime.fromtimestamp(int(tm_to), datetime.timezone.utc)
+    if resolution.isdigit():
+        resolution += 'Min'
     history = db.load_history(symbol=symbol, tm_from=tm_from, tm_to=tm_to, resolution=resolution)
     return HJSONResponse(history)
 
@@ -133,7 +135,6 @@ async def symbol_route(request):
             "60",
             "1D",
             "1W",
-            "1W"
         ]})
 
 
