@@ -4,6 +4,7 @@ import os
 from io import StringIO
 from sqlalchemy import func, or_
 from sqlalchemy import create_engine
+from sqlalchemy.sql import text
 from sqlalchemy.orm import sessionmaker
 
 from .models import Block, Order, Trade, Token
@@ -43,7 +44,9 @@ class Database:
             query = query.filter_by(**filter)
         orders = query.all()
         return [dict(trade_id=i.id, type=i.type, side=i.side, quantity=i.quantity, origin_quantity=i.origin_quantity,
-                    price=i.price, addr=i.addr, 
+                    price=i.price,
+                    avg_price=0 if i.origin_quantity==i.quantity else i.sum_price/(i.origin_quantity-i.quantity),
+                    addr=i.addr,
                     height=i.height, created_at=i.created_at, updated_at=i.updated_at,
                     status=i.status, symbol=i.token.symbol,
                     ) for i in orders]
@@ -238,6 +241,8 @@ class Database:
                         self.session.query(Order).filter(Order.id == t['party1'][0]).update({Order.status:'done', Order.quantity:0})
                     else:
                         self.session.query(Order).filter(Order.id == t['party1'][0]).update({Order.quantity:t['party1'][3]})
+
+                    self.session.execute(text(f'update "order" set sum_price=sum_price+{t["quantity"]*t["price"]} where id={t["party1"][0]} or id={t["party2"][0]}'))
                     self.session.add(Trade(token_id=token_id, price=t['price'], quantity=t['quantity'], party1_order_id=t['party1'][0], party2_order_id=t['party2'][0]))
 
                 self.session.commit()

@@ -54,6 +54,7 @@ class Order(Base):
     quantity = sqlalchemy.Column(sqlalchemy.INTEGER)
     origin_quantity = sqlalchemy.Column(sqlalchemy.INTEGER)
     price = sqlalchemy.Column(sqlalchemy.DECIMAL)
+    sum_price = sqlalchemy.Column(sqlalchemy.DECIMAL, default=0)
     addr = sqlalchemy.Column(sqlalchemy.String(100))
     status = sqlalchemy.Column(ChoiceType({"todo": "todo", "done": "done", "cancel": "cancel"}), nullable=False, default='todo')
     height = sqlalchemy.Column(sqlalchemy.INTEGER, default=0)
