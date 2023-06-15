@@ -72,6 +72,14 @@ async def order_route(request):
     symbol = request.query_params.get('symbol')
     if symbol:
         filter['symbol'] = symbol
+    tm_from = request.query_params.get('from')
+    tm_to = request.query_params.get('to')
+    if tm_from:
+        tm_from = datetime.datetime.fromtimestamp(int(tm_from), datetime.timezone.utc)
+        filter['tm_from'] = tm_from
+    if tm_to:
+        tm_to = datetime.datetime.fromtimestamp(int(tm_to), datetime.timezone.utc)
+        filter['tm_to'] = tm_to
     orders = db.load_valid_orders(filter)
     return HJSONResponse(orders)
 

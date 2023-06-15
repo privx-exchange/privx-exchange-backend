@@ -49,6 +49,12 @@ class Database:
             if 'symbol' in filter:
                 symbol = filter.pop('symbol')
                 query = query.filter(Order.token.has(symbol=symbol))
+            if 'tm_from' in filter:
+                tm_from = filter.pop('tm_from')
+                query = query.filter(Order.created_at >= tm_from)
+            if 'tm_to' in filter:
+                tm_to = filter.pop('tm_to')
+                query = query.filter(Order.created_at <= tm_to)
             query = query.filter_by(**filter)
         orders = query.all()
         return [dict(trade_id=i.id, type=i.type, side=i.side, quantity=i.quantity, origin_quantity=i.origin_quantity,
