@@ -33,8 +33,16 @@ class Database:
     def load_tokens(self):
         query = self.session.query(Token).order_by(Token.id)
         tokens = query.all()
-        return [dict(id=i.id, base=i.base, quote=i.quote, symbol=i.symbol) for i in tokens]
-
+        ret = []
+        for i in tokens:
+            if i.id == 1:
+                buy = 'buy'
+                sell = 'sell'
+            else:
+                buy = 'buy_2'
+                sell = 'sell_2'
+            ret.append(dict(id=i.id, base=i.base, quote=i.quote, symbol=i.symbol, contract_buy=buy, contract_sell=sell))
+        return ret
     def load_valid_orders(self, filter=None):
         query = self.session.query(Order).order_by(Order.id)
         if filter:
