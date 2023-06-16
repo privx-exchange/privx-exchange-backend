@@ -14,6 +14,6 @@ if __name__ == '__main__':
     Base.metadata.drop_all(engine)
     Base.metadata.create_all(engine)
 
-    session.add(Token(id=1, base="usdt", quote="aleo", symbol="ALEO-USDT"))
-    session.add(Token(id=2, base="usdt", quote="tk1", symbol="TK1-USDT"))
+    session.add(Token(id=1, base="LEO", quote="TK1", symbol="TK1-LEO"))
+    session.add(Token(id=2, base="LEO", quote="TK2", symbol="TK2-LEO"))
     session.commit()
