@@ -38,10 +38,12 @@ class Database:
             if i.id == 1:
                 buy = 'buy'
                 sell = 'sell'
+                decimals = 6
             else:
                 buy = 'buy_2'
                 sell = 'sell_2'
-            ret.append(dict(id=i.id, base=i.base, quote=i.quote, symbol=i.symbol, contract_buy=buy, contract_sell=sell))
+                decimals = 6
+            ret.append(dict(id=i.id, base=i.base, quote=i.quote, symbol=i.symbol, contract_buy=buy, contract_sell=sell, decimals=decimals))
         return ret
     def load_valid_orders(self, filter=None):
         query = self.session.query(Order).order_by(Order.id)
